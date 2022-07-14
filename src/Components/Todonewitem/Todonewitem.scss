@@ -1,0 +1,38 @@
+.Todonewitem{
+    display: flex;
+    margin: 10px 0;
+    background-color: azure;
+    width: 70%;
+    form{
+        width: 100%;
+        display: flex;
+        input:first-child{
+            flex: 70%;
+            margin: 0 1px;
+            color: rgb(10, 12, 12);
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        input:last-child{
+            
+        }
+
+        .icons{
+            cursor:pointer;
+            background-color: rgb(159, 35, 237);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 30px;
+            height: 30px;
+        }
+
+    }
+}
+
+@media screen and (max-width:768px) {
+    .Todonewitem{
+        width: 100%;
+    }
+}
