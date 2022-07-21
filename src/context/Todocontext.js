@@ -43,10 +43,15 @@ const TodoProvider =({children})=>{
             headers : {
                 'Content-Type' : 'application/json'
                 }
-            }).then(res=>res.json()).then(data=>{
+            }).then(res=>{
+                if(res.ok){
+                    return res.json()
+                }
+                throw new Error("Error while deleting")
+            }).then(data=>{
                 setMessage(data.message)
                 console.log(data.message)
-            })
+            }).catch(e=>console.log(e))
     },[message])
   
 
@@ -60,7 +65,12 @@ const TodoProvider =({children})=>{
                 'Content-Type' : 'application/json'
             },
             body : JSON.stringify( { title : title , completed : status })
-            }).then(res=>res.json()).then(data=>(data))
+            }).then(res=>{
+                if (res.ok){
+                    return res.json()
+                }
+                throw new Error("Error in updating item")
+            }).then(data=>(data)).catch(e=>console.log(e))
         }
         else{
             fetch('http://127.0.0.1:8000/todo/',{
@@ -69,7 +79,12 @@ const TodoProvider =({children})=>{
                     'Content-Type' : 'application/json'
                 },
                 body : JSON.stringify( { title : title, completed : status } )
-        }).then(res=>res.json().then(data=>data))
+        }).then(res=>{
+            if (res.ok){
+                return res.json()
+            }
+            throw new Error("Error in handling new item")
+        }).then(data=>data).catch(e=>console.log(e))
     }
         setItemid(null)
         setTitle('')
@@ -77,16 +92,26 @@ const TodoProvider =({children})=>{
     },[title,status])
 
     function fetchData(){
-        return fetch("http://127.0.0.1:8000/todo/").then((res)=> res.json()).then(data=>data)
+        return fetch("http://127.0.0.1:8000/todo/").then((res)=> {
+            if (res.ok){
+                return res.json()
+            }
+            throw new Error("Something went wrong")
+        })
         }
     
     function fetchDetail(id){
         return fetch(`http://127.0.0.1:8000/tododetails/${id}`).
-        then(res=>res.json()).then(data=>data)
+        then(res=>{
+            if (res.ok){
+                return res.json()
+            }
+            throw new Error("Something went wrong")
+             }).then(data=>data).catch(e=>console.log(e))
     }
 
     useEffect(()=>{
-        fetchData().then(data=>setTodo(data))
+        fetchData().then(data=>setTodo(data)).catch(e=>console.log(e))
     },[handleNewitem,handleDelete,handleUpdate])
 
     let context = {
